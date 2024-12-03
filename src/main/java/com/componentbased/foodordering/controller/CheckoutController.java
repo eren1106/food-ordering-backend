@@ -16,7 +16,7 @@ public class CheckoutController {
     private MenuService menuService;
 
     @PostMapping("/checkout")
-    public double checkout(@RequestBody List<OrderItem> items) {
+    public double checkout(@RequestBody List<OrderItem> orderItems) {
         // TODO: return the calculated price
         return 0;
     }
