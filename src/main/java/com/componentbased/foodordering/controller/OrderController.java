@@ -13,13 +13,18 @@ public class OrderController {
 
     private final List<Order> storedOrders = new ArrayList<>();
 
-    @PostMapping("/order")
+    @PostMapping("/orders")
     public Order placeOrder(@RequestBody List<OrderItem> orderItems) {
         // TODO: create an order according to the orderItems and add the order to storedOrders, and then return the order
         return new Order();
     }
 
-    @GetMapping("/api/order/{id}")
+    @GetMapping("/orders")
+    public List<Order> getOrders() {
+        return storedOrders;
+    }
+
+    @GetMapping("/orders/{id}")
     public Order getOrderById(@PathVariable("id") int id) {
         // TODO: return the order according to the selected id, throw error if id not found
         return new Order();
