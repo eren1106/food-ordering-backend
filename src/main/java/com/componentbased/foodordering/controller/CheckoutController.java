@@ -1,9 +1,8 @@
 package com.componentbased.foodordering.controller;
 
-import com.componentbased.foodordering.model.FoodItem;
-import com.componentbased.foodordering.model.OrderItem;
+import com.componentbased.foodordering.model.CheckoutDetail;
+import com.componentbased.foodordering.model.ItemQuantity;
 import com.componentbased.foodordering.service.MenuService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,14 +10,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class CheckoutController {
+    private final MenuService menuService;
 
-    @Autowired
-    private MenuService menuService;
+    public CheckoutController(MenuService menuService) {
+        this.menuService = menuService;
+    }
 
     @PostMapping("/checkout")
-    public double checkout(@RequestBody List<OrderItem> orderItems) {
-        // TODO: return the calculated price
-        return 0;
+    public CheckoutDetail checkout(@RequestBody List<ItemQuantity> items) {
+        // TODO: return Checkout object based on the items
+        return null;
     }
 }
+
 

@@ -1,18 +1,30 @@
 package com.componentbased.foodordering.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.List;
+import jakarta.persistence.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 public class Order {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToMany(cascade = CascadeType.ALL)
     private List<OrderItem> items;
+
     private double subtotal;
     private double serviceCharge;
     private double total;
+    // Constructors, getters, and setters
 }
+
+//@Data
+//@NoArgsConstructor
+//@AllArgsConstructor
+//public class Order {
+//    private int id;
+//    private List<OrderItem> items;
+//    private double subtotal;
+//    private double serviceCharge;
+//    private double total;
+//}

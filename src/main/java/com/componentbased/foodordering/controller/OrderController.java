@@ -1,32 +1,29 @@
 package com.componentbased.foodordering.controller;
 
 import com.componentbased.foodordering.model.Order;
-import com.componentbased.foodordering.model.OrderItem;
+import com.componentbased.foodordering.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
 public class OrderController {
+    private final OrderService service;
 
-    private final List<Order> storedOrders = new ArrayList<>();
-
-    @PostMapping("/orders")
-    public Order placeOrder(@RequestBody List<OrderItem> orderItems) {
-        // TODO: create an order according to the orderItems and add the order to storedOrders, and then return the order
-        return new Order();
+    public OrderController(OrderService service) {
+        this.service = service;
     }
 
-    @GetMapping("/orders")
-    public List<Order> getOrders() {
-        return storedOrders;
+    @PostMapping("/order")
+    public Order placeOrder(@RequestBody Order order) {
+        // TODO: add order to db and return it
+        return null;
     }
 
-    @GetMapping("/orders/{id}")
-    public Order getOrderById(@PathVariable("id") int id) {
-        // TODO: return the order according to the selected id, throw error if id not found
-        return new Order();
+    @GetMapping("/order/{id}")
+    public Order getOrderById(@PathVariable Long id) {
+        // TODO: get order by id and return it
+        return null;
     }
 }
