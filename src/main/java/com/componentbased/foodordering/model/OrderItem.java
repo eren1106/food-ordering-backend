@@ -16,7 +16,37 @@ public class OrderItem {
     private Long foodItemId;
     private Integer quantity;
 
-    // Constructors, getters, and setters
+    public OrderItem() {
+    }
+
+    public OrderItem(Long foodItemId, Integer quantity) {
+        this.foodItemId = foodItemId;
+        this.quantity = quantity;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getFoodItemId() {
+        return foodItemId;
+    }
+
+    public void setFoodItemId(Long foodItemId) {
+        this.foodItemId = foodItemId;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 }
 
 //@Data

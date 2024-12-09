@@ -2,6 +2,7 @@ package com.componentbased.foodordering.controller;
 
 import com.componentbased.foodordering.model.CheckoutDetail;
 import com.componentbased.foodordering.model.ItemQuantity;
+import com.componentbased.foodordering.service.CheckoutService;
 import com.componentbased.foodordering.service.MenuService;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,16 +11,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class CheckoutController {
-    private final MenuService menuService;
+    private final CheckoutService checkoutService;
 
-    public CheckoutController(MenuService menuService) {
-        this.menuService = menuService;
+    public CheckoutController(CheckoutService checkoutService) {
+        this.checkoutService = checkoutService;
     }
 
     @PostMapping("/checkout")
     public CheckoutDetail checkout(@RequestBody List<ItemQuantity> items) {
-        // TODO: return Checkout object based on the items
-        return null;
+        return checkoutService.calculateCheckout(items);
     }
 }
 
