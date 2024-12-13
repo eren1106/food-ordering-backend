@@ -1,5 +1,6 @@
 package com.componentbased.foodordering.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -9,12 +10,16 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.Entity;
 
 @Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long foodItemId;
     private Integer quantity;
+    private Double itemTotal;
+    private String foodItemName;
+    private Double foodItemPrice;
 
     public OrderItem() {
     }
@@ -46,6 +51,26 @@ public class OrderItem {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Double getItemTotal() { return itemTotal; }
+
+    public void setItemTotal(Double itemTotal) { this.itemTotal = itemTotal; }
+
+    public String getFoodItemName() {
+        return foodItemName;
+    }
+
+    public void setFoodItemName(String foodItemName) {
+        this.foodItemName = foodItemName;
+    }
+
+    public Double getFoodItemPrice() {
+        return foodItemPrice;
+    }
+
+    public void setFoodItemPrice(Double foodItemPrice) {
+        this.foodItemPrice = foodItemPrice;
     }
 }
 

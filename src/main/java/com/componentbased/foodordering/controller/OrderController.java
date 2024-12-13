@@ -41,4 +41,23 @@ public class OrderController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/orders/{id}")
+    public ResponseEntity<Order> getOrderSummaryById(@PathVariable Long id) {
+        Optional<Order> orderOpt = service.getOrderById(id);
+
+        if (orderOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Order order = orderOpt.get();
+        service.getOrderSummary(order);
+
+        return ResponseEntity.ok(order);
+    }
+
+    @GetMapping("/orders")
+    public List<Order> getAllOrder() {
+        return service.getAllOrders();
+    }
 }
