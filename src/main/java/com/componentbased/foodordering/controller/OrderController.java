@@ -2,7 +2,11 @@ package com.componentbased.foodordering.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.componentbased.foodordering.dto.CheckoutResponse;
+import com.componentbased.foodordering.dto.OrderResponse;
+import com.componentbased.foodordering.model.OrderItem;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,14 +33,24 @@ public class OrderController {
     }
 
     @PostMapping("/order")
-    public Order placeOrder(@RequestBody List<ItemQuantity> items) {
-        CheckoutDetail checkoutDetail = checkoutService.calculateCheckout(items);
+    public OrderResponse placeOrder(@RequestBody List<ItemQuantity> items) {
+        CheckoutResponse checkoutResponse = checkoutService.calculateCheckout(items);
 
         Order order = new Order();
-        order.setItems(checkoutDetail.getItems());
-        order.setSubtotal(checkoutDetail.getSubtotal());
-        order.setServiceCharge(checkoutDetail.getServiceCharge());
-        order.setTotal(checkoutDetail.getTotal());
+
+        List<OrderItem> orderItems = checkoutResponse.getOrderItems().stream()
+                .map(itemResponse -> {
+                    OrderItem orderItem = new OrderItem();
+                    orderItem.setFoodItemId(itemResponse.getItem().getId());
+                    orderItem.setQuantity(itemResponse.getQuantity());
+                    return orderItem;
+                })
+                .collect(Collectors.toList());
+
+        order.setItems(orderItems);
+        order.setSubtotal(checkoutResponse.getSubTotal());
+        order.setServiceCharge(checkoutResponse.getServiceCharge());
+        order.setTotal(checkoutResponse.getTotal());
 
         return service.placeOrder(order);
     }

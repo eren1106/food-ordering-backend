@@ -5,6 +5,9 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.componentbased.foodordering.dto.CheckoutResponse;
+import com.componentbased.foodordering.dto.FoodItemResponse;
+import com.componentbased.foodordering.dto.OrderItemResponse;
 import org.springframework.stereotype.Service;
 
 import com.componentbased.foodordering.model.CheckoutDetail;
@@ -22,33 +25,37 @@ public class CheckoutService {
         this.foodItemRepository = foodItemRepository;
     }
 
-    public CheckoutDetail calculateCheckout(List<ItemQuantity> items) {
-        List<OrderItem> orderItems = new ArrayList<>();
-        BigDecimal subtotal = BigDecimal.ZERO;
+    public CheckoutResponse calculateCheckout(List<ItemQuantity> items) {
+        List<OrderItemResponse> orderItems = new ArrayList<>();
+        double subtotal = 0.0;
 
         for (ItemQuantity item : items) {
-            System.out.println("Looking for food item with id: " + item.getItemId());
             FoodItem foodItem = foodItemRepository.findById((long) item.getItemId())
                     .orElseThrow(() -> new RuntimeException("Food item not found"));
 
-            OrderItem orderItem = new OrderItem();
-            orderItem.setFoodItemId(foodItem.getId());
-            orderItem.setQuantity(item.getQuantity());
-            orderItems.add(orderItem);
+            OrderItemResponse orderItemResponse = new OrderItemResponse();
+            orderItemResponse.setQuantity(item.getQuantity());
 
-            BigDecimal itemTotal = BigDecimal.valueOf(foodItem.getPrice())
-                    .multiply(BigDecimal.valueOf(item.getQuantity()));
-            subtotal = subtotal.add(itemTotal);
+            FoodItemResponse foodItemResponse = new FoodItemResponse();
+            foodItemResponse.setId(foodItem.getId());
+            foodItemResponse.setName(foodItem.getName());
+            foodItemResponse.setPrice(foodItem.getPrice());
+
+            orderItemResponse.setItem(foodItemResponse);
+            orderItems.add(orderItemResponse);
+
+            subtotal += foodItem.getPrice() * item.getQuantity();
         }
 
-        BigDecimal serviceCharge = subtotal.multiply(BigDecimal.valueOf(SERVICE_CHARGE_RATE));
-        BigDecimal total = subtotal.add(serviceCharge);
+        double serviceCharge = subtotal * 0.06;
+        double total = subtotal + serviceCharge;
 
-        // Round to 2 decimal places
-        subtotal = subtotal.setScale(2, RoundingMode.HALF_UP);
-        serviceCharge = serviceCharge.setScale(2, RoundingMode.HALF_UP);
-        total = total.setScale(2, RoundingMode.HALF_UP);
+        CheckoutResponse response = new CheckoutResponse();
+        response.setOrderItems(orderItems);
+        response.setSubTotal(subtotal);
+        response.setServiceCharge(serviceCharge);
+        response.setTotal(total);
 
-        return new CheckoutDetail(orderItems, subtotal.doubleValue(), serviceCharge.doubleValue(), total.doubleValue());
+        return response;
     }
 }

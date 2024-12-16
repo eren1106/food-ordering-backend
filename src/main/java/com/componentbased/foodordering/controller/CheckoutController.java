@@ -2,6 +2,7 @@ package com.componentbased.foodordering.controller;
 
 import java.util.List;
 
+import com.componentbased.foodordering.dto.CheckoutResponse;
 import org.springframework.web.bind.annotation.*;
 
 import com.componentbased.foodordering.model.CheckoutDetail;
@@ -18,7 +19,7 @@ public class CheckoutController {
     }
 
     @PostMapping("/checkout")
-    public CheckoutDetail checkout(@RequestBody List<ItemQuantity> items) {
+    public CheckoutResponse checkout(@RequestBody List<ItemQuantity> items) {
         return checkoutService.calculateCheckout(items);
     }
 }
