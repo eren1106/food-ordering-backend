@@ -1,12 +1,15 @@
 package com.componentbased.foodordering.controller;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.componentbased.foodordering.model.CheckoutDetail;
 import com.componentbased.foodordering.model.ItemQuantity;
 import com.componentbased.foodordering.service.CheckoutService;
-import com.componentbased.foodordering.service.MenuService;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")

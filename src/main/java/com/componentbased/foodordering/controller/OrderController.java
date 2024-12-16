@@ -1,15 +1,21 @@
 package com.componentbased.foodordering.controller;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.componentbased.foodordering.model.CheckoutDetail;
 import com.componentbased.foodordering.model.ItemQuantity;
 import com.componentbased.foodordering.model.Order;
 import com.componentbased.foodordering.service.CheckoutService;
 import com.componentbased.foodordering.service.OrderService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -33,13 +39,6 @@ public class OrderController {
         order.setTotal(checkoutDetail.getTotal());
 
         return service.placeOrder(order);
-    }
-
-    @GetMapping("/order/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
-        return service.getOrderById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/orders/{id}")

@@ -1,14 +1,17 @@
 package com.componentbased.foodordering.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.componentbased.foodordering.model.CheckoutDetail;
 import com.componentbased.foodordering.model.FoodItem;
 import com.componentbased.foodordering.model.ItemQuantity;
 import com.componentbased.foodordering.model.OrderItem;
 import com.componentbased.foodordering.repository.FoodItemRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class CheckoutService {
@@ -21,7 +24,7 @@ public class CheckoutService {
 
     public CheckoutDetail calculateCheckout(List<ItemQuantity> items) {
         List<OrderItem> orderItems = new ArrayList<>();
-        double subtotal = 0.0;
+        BigDecimal subtotal = BigDecimal.ZERO;
 
         for (ItemQuantity item : items) {
             System.out.println("Looking for food item with id: " + item.getItemId());
@@ -33,12 +36,19 @@ public class CheckoutService {
             orderItem.setQuantity(item.getQuantity());
             orderItems.add(orderItem);
 
-            subtotal += foodItem.getPrice() * item.getQuantity();
+            BigDecimal itemTotal = BigDecimal.valueOf(foodItem.getPrice())
+                    .multiply(BigDecimal.valueOf(item.getQuantity()));
+            subtotal = subtotal.add(itemTotal);
         }
 
-        double serviceCharge = subtotal * SERVICE_CHARGE_RATE;
-        double total = subtotal + serviceCharge;
+        BigDecimal serviceCharge = subtotal.multiply(BigDecimal.valueOf(SERVICE_CHARGE_RATE));
+        BigDecimal total = subtotal.add(serviceCharge);
 
-        return new CheckoutDetail(orderItems, subtotal, serviceCharge, total);
+        // Round to 2 decimal places
+        subtotal = subtotal.setScale(2, RoundingMode.HALF_UP);
+        serviceCharge = serviceCharge.setScale(2, RoundingMode.HALF_UP);
+        total = total.setScale(2, RoundingMode.HALF_UP);
+
+        return new CheckoutDetail(orderItems, subtotal.doubleValue(), serviceCharge.doubleValue(), total.doubleValue());
     }
 }
